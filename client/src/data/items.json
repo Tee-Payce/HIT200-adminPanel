@@ -1,0 +1,72 @@
+[
+{
+	"id": 1,
+	"comboname":"Chicken",
+	"varient":"Sadza and chicken",
+	"price": 1.00,
+	"image":"/imgs/sadzaChicken.jpeg"
+},
+{
+	"id": 2,
+	"comboname":"Chicken",
+	"varient":"Rice and chicken",
+	"price": 1.00,
+	"image":"/imgs/riceChicken.jpeg"
+},
+{
+	"id": 3,
+	"comboname":"Chicken",
+	"varient":"macaroni and chicken",
+	"price": 1.00,
+	"image":"/imgs/macChicken.jpeg"
+},
+{
+	"id": 4,
+	"comboname":"Beef",
+	"varient":"Sadza and beef",
+	"price": 1.00,
+	"image":"/imgs/sadzaBeef.jpeg"
+},
+{
+	"id": 5,
+	"comboname":"Beef",
+	"varient":"rice and beef",
+	"price": 1.00,
+	"image":"/imgs/riceBeef.jpeg"
+},
+{
+	"id": 6,
+	"comboname":"Beef",
+	"varient":"macaroni and beef",
+	"price": 1.00,
+	"image":"/imgs/macBeef.jpeg"
+},
+{
+	"id": 7,
+	"comboname":"Beans",
+	"varient":"Sadza and beans",
+	"price": 0.50,
+	"image":"/imgs/sadzaBeans.jpeg"
+},
+{
+	"id": 8,
+	"comboname":"Beans",
+	"varient":"rice and beans",
+	"price": 0.50,
+	"image":"/imgs/riceBeans.jpeg"
+},
+{
+	"id": 9,
+	"comboname":"Beans",
+	"varient":"macaroni and beans",
+	"price": 0.50,
+	"image":"/imgs/macBeans.jpeg"
+},
+{
+	"id": 10,
+	"comboname":"Special",
+	"varient":"1/4 chicken and chips",
+	"price": 2.00,
+	"image":"/imgs/chickenChips.jpeg"
+}
+]
