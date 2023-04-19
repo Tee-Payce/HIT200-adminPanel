@@ -1,41 +1,30 @@
 import mongoose from "mongoose";
+import bcrypt from "bcrypt";
 
-const UserSchema = new mongoose.Schema(
-  {
-    fname: {
-      type: String,
-      required: true,
-      min: 2,
-      max: 100,
-    },
-   sname:{
+const UserSchema = new mongoose.Schema({
+  fname: {
     type: String,
     required: true,
-    min: 2,
-    max: 100,
-   },
-    password: {
-      type: String,
-      required: true,
-      min: 5,
-    },
-    studentID: {
-        type: String,
-         required: true,
-         unique: true,
-    },
-    
-  
-    
-    transactions: Array,
-    role: {
-      type: String,
-      enum: ["user", "admin", "superadmin"],
-      default: "user",
-    },
   },
-  { timestamps: true }
-);
+  sname: {
+    type: String,
+    required: true,
+  },
+  password: {
+    type: String,
+    required: true,
+  },
+  studentID: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  role: {
+    type: String,
+    required: false,
+    default: "user",
+  },
+});
 UserSchema.pre("save", async function (next) {
   try {
     const salt = await bcrypt.genSalt(10);
@@ -46,7 +35,6 @@ UserSchema.pre("save", async function (next) {
     next(error);
   }
 });
-
 
 const User = mongoose.model("User", UserSchema);
 export default User;
