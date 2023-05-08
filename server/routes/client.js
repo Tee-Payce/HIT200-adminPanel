@@ -1,17 +1,23 @@
 import express from "express";
-import {
-  getMeals,
-  getCustomers,
-  getTransactions,
-} from "../controllers/client.js";
+import { getMeals, getCustomers, getTransactions } from "../controllers/client.js";
 import User from "../models/User.js";
-import bcrypt from "bcrypt";
+import bcrypt from  "bcrypt";
 import jwt from "jsonwebtoken";
+
+
+import { createMeal } from '../controllers/meals.js';
+
 
 const router = express.Router();
 router.get("/meals", getMeals);
 router.get("/customers", getCustomers);
 router.get("/transactions", getTransactions);
+
+
+// POST /api/meals
+router.post('/pstmeals', createMeal);
+
+
 
 // Register route
 router.post("/register", async (req, res) => {
@@ -21,15 +27,12 @@ router.post("/register", async (req, res) => {
       sname: req.body.sname,
       studentID: req.body.studentID,
       password: req.body.password,
-      role: req.body.role,
     });
     await user.save();
     res.status(201).send(user);
   } catch (error) {
     console.error(error);
     res.status(400).send(error);
-    // send the exact error message to the client
-    res.send({ message: error.message });
   }
 });
 
