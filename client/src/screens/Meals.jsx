@@ -11,17 +11,17 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material";
-import Header from './global/Header';
+import Icon from "@mui/material/Icon";
+import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
+import Header from "./global/Header";
 import { useGetMealsQuery } from "../state/api";
 
-const Meal = ({
-  _id,
-  comboname,
-  varient,
-  price,
-  rating,
-  stat,
-}) => {
+import { useCreateMealMutation } from "../state/api";
+
+import FlexBetween from "../components/flexBetween";
+import { Form } from "react-bootstrap";
+
+const Meal = ({ _id, comboname, varient, price, rating, stat }) => {
   const theme = useTheme();
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -48,7 +48,6 @@ const Meal = ({
           ${Number(price).toFixed(2)}
         </Typography>
         <Rating value={rating} readOnly />
-
       </CardContent>
       <CardActions>
         <Button
@@ -80,19 +79,119 @@ const Meal = ({
     </Card>
   );
 };
-export function Meals(){
+export function Meals() {
+  const { data, isLoading } = useGetMealsQuery();
+  console.log("🚀 ~ file: Meals.jsx:21 ~ Meals ~ data:", data);
+  const isNonMobile = useMediaQuery("(min-width : 1000px)");
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
-    const { data , isLoading} = useGetMealsQuery();
-    console.log("🚀 ~ file: Meals.jsx:21 ~ Meals ~ data:", data);
-    const isNonMobile = useMediaQuery("(min-width : 1000px)")
+  const [comboname, setComboname] = useState("");
+  const [varient, setVarient] = useState("");
+  const [price, setPrice] = useState(0);
+  const [rating, setRating] = useState(0);
+  const [image, setImage] = useState("");
+  const [createMeal, { isError }] = useCreateMealMutation();
 
+  const handleAddMealClick = () => {
+    setIsModalOpen(true);
+  };
 
-return(
-  <Box m="1.5rem 2.5rem">
-    <Header title="Meals" subtitle="See your menu"/>
-      {
-        data || !isLoading ?(
-          <Box
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const newMeal = {
+      comboname,
+      varient,
+      price,
+      rating,
+      image,
+    };
+    createMeal(newMeal)
+      .unwrap()
+      .then(() => {
+        setIsModalOpen(false);
+        // optionally, you can update the list of meals here
+      });
+  };
+
+  return (
+    <Box m="1.5rem 2.5rem">
+      <FlexBetween>
+        <Header title="Meals" subtitle="See your menu" />
+        <Box>
+          <div>
+            <Button
+              onClick={handleAddMealClick}
+              sx={{
+                backgroundColor: "#333333",
+                color: "#666666",
+                fontSize: "14px",
+                fontWeight: "bold",
+                padding: "10px 20px",
+              }}
+            >
+              <PlaylistAddOutlinedIcon sx={{ mr: "10px" }} />
+              Add New Meal
+            </Button>
+            {isModalOpen && (
+              <div className="modal-overlay">
+                <div className="modal">
+                  <h2>Add Meal</h2>
+                  <Form onSubmit={handleSubmit}>
+                    <label htmlFor="comboname">Combo Name:</label>
+                    <input
+                      type="text"
+                      id="comboname"
+                      value={comboname}
+                      onChange={(e) => setComboname(e.target.value)}
+                    />
+                    <label htmlFor="varient">Variant:</label>
+                    <input
+                      type="text"
+                      id="varient"
+                      value={varient}
+                      onChange={(e) => setVarient(e.target.value)}
+                    />
+                    <label htmlFor="price">Price:</label>
+                    <input
+                      type="number"
+                      id="price"
+                      value={price}
+                      onChange={(e) => setPrice(e.target.value)}
+                    />
+                    <label htmlFor="rating">Rating:</label>
+                    <input
+                      type="number"
+                      id="rating"
+                      value={rating}
+                      onChange={(e) => setRating(e.target.value)}
+                    />
+                    <label htmlFor="image">Image:</label>
+                    <input
+                      type="text"
+                      id="image"
+                      value={image}
+                      onChange={(e) => setImage(e.target.value)}
+                    />
+                    <div className="modal-buttons">
+                      <button type="submit" disabled={isLoading}>
+                        {isLoading ? "Adding meal..." : "Add meal"}
+                      </button>
+                      <button onClick={() => setIsModalOpen(false)}>
+                        Cancel
+                      </button>
+                    </div>
+                    {isError && (
+                      <div className="error-message">Error adding meal</div>
+                    )}
+                  </Form>
+                </div>
+              </div>
+            )}
+          </div>
+        </Box>
+      </FlexBetween>
+      {data || !isLoading ? (
+        <Box
           mt="20px"
           display="grid"
           gridTemplateColumns="repeat(4, minmax(0, 1fr))"
@@ -110,8 +209,7 @@ return(
               varient,
               price,
               rating,
-              
-              
+
               stat,
             }) => (
               <Meal
@@ -125,10 +223,10 @@ return(
               />
             )
           )}
-          </Box>
-        ) :<>Loading...</>
-      }
+        </Box>
+      ) : (
+        <>Loading...</>
+      )}
     </Box>
-);
-
-};
+  );
+}
